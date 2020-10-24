@@ -1,5 +1,5 @@
 const {v4} = require('uuid');
-const {isCaptchaValid} = require('../util/cpatch');
+const {isCaptchaValid} = require('../util/cpatcha');
 const{contentServer} = require('../util/awake');
 
 exports.init = (router)=>{
