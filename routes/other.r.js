@@ -1,9 +1,14 @@
 const {v4} = require('uuid');
 const {isCaptchaValid} = require('../util/cpatch');
+const{contentServer} = require('../util/awake');
 
 exports.init = (router)=>{
     router.get('/awake', async (req, res, next)=>{
-        res.json({id: v4()});
+        const contentServerAwake = await contentServer();
+        res.json({
+            id: v4(),
+            contentServerAwake
+        });
     });
 
     router.get("/captcha", async(req, res, next) => {
