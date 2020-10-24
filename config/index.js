@@ -1,6 +1,6 @@
 module.exports = {
     development: {
-        port: process.env.PORT || 3000,
+        port: process.env.PORT || 5000,
         saltingRounds: 10,
         corsOptions: {
             origin: "*",
@@ -27,7 +27,8 @@ module.exports = {
             accountSid: process.env.TWILIO_ACC_SID,
             authToken: process.env.TWILIO_AUTH,
             fromNumber: process.env.TWILIO_FROM
-        }
+        },
+        googleRecaptch: process.env.GOOGLE_RECAPTCHA_SECRET_KEY
     },
     production: {
         port: process.env.PORT || 80,
@@ -58,6 +59,7 @@ module.exports = {
             accountSid: process.env.TWILIO_ACC_SID,
             authToken: process.env.TWILIO_AUTH,
             fromNumber: process.env.TWILIO_FROM
-        }
+        },
+        googleRecaptch: process.env.GOOGLE_RECAPTCHA_SECRET_KEY
     }
 }
