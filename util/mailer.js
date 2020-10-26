@@ -1,18 +1,25 @@
-const nodemailer = require("nodemailer");
-require('dotenv').config();
+require("dotenv").config();
 const environment = process.env.NODE_ENV;
-const stage = require('../config/index')[environment];
+const stage = require("../config/index")[environment];
+const { merge } = require("lodash");
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(stage.sendGridApiKey);
 
-exports.sendMail = async function(mailObject, logMessage) {
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: stage.mailer.user,
-          pass: stage.mailer.password
-        }
-    });
+// mailObject example:
+// {
+//   to: 'test@example.com',
+//   subject: 'Sending with SendGrid is Fun',
+//   text: 'and easy to do anywhere, even with Node.js',
+//   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+// }
 
-    let info = await transporter.sendMail(mailObject);
-
-    console.log("[mailer] %s: %s", logMessage, info.messageId);
+exports.sendMail = async (mailObject) => {
+  try {
+    const msg = merge({ from: "anas.najaa@outlook.com" }, mailObject);
+    const response = await sgMail.send(msg);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
 };
