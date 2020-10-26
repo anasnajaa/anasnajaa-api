@@ -29,7 +29,9 @@ module.exports = {
             fromNumber: process.env.TWILIO_FROM
         },
         googleRecaptch: process.env.GOOGLE_RECAPTCHA_SECRET_KEY,
-        sendGridApiKey: process.env.SENDGRID_API_KEY
+        sendGridApiKey: process.env.SENDGRID_API_KEY,
+        rootUrl: "http://localhost:"+process.env.PORT,
+        publicUrl: "https://anasnajaa-api.herokuapp.com"
     },
     production: {
         port: process.env.PORT || 80,
@@ -62,6 +64,8 @@ module.exports = {
             fromNumber: process.env.TWILIO_FROM
         },
         googleRecaptch: process.env.GOOGLE_RECAPTCHA_SECRET_KEY,
-        sendGridApiKey: process.env.SENDGRID_API_KEY
+        sendGridApiKey: process.env.SENDGRID_API_KEY,
+        rootUrl: "https://anasnajaa-api.herokuapp.com",
+        publicUrl: "https://anasnajaa-api.herokuapp.com"
     }
 }
