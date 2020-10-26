@@ -1,4 +1,4 @@
-const {isCaptchaValid} = require('../util/cpatcha');
+const {isCaptchaValid} = require('../util/captcha');
 
 module.exports = async(req, res, next) => {
     const key = req.query.key;
