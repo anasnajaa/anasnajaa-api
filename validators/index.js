@@ -1,18 +1,18 @@
 const validator = require('validator');
 
-exports.vEmail = (errors, email)=> {
+exports.vEmail = (fieldName, errors, email)=> {
     if(!validator.isEmail(email)) {
-        errors["email"] = "Please use valid email";
+        errors[fieldName] = "Please use valid email";
     }
 };
 
-exports.vEmpty = (errors, value, fieldName)=> {
+exports.vEmpty = (fieldName, errors, value)=> {
     if(!value || validator.isEmpty(value)) {
         errors[fieldName] = "This field is required";
     }
 };
 
-exports.vNumeric = (errors, value, fieldName)=> {
+exports.vNumeric = (fieldName, errors, value)=> {
     if(value !== undefined && value !== null) {
         if(!validator.isNumeric(value.toString())){
             errors[fieldName] = "Must be a number";
@@ -22,12 +22,12 @@ exports.vNumeric = (errors, value, fieldName)=> {
     }
 };
 
-exports.vPassword = (errors, password)=> {
+exports.vPassword = (fieldName, errors, password)=> {
     if(!validator.isAscii(password)) {
-        errors["password"] = "Invalid characters used in the password";
+        errors[fieldName] = "Invalid characters used in the password";
     }
     if(!validator.isLength(password, {min: 8, max: 25})){
-        errors["password"] = "Password length must be not less than 8 characters and not more than 25 characters";
+        errors[fieldName] = "Password length must be not less than 8 characters and not more than 25 characters";
     }
 };
 
@@ -36,18 +36,3 @@ exports.vIsJpegFile = (fieldName, errors, file)=>{
         errors[fieldName] = "Uploaded file must be a picture of type JPEG";
     }
 };
-
-exports.validateUserSignup = async (errors, email, password) => {
-    this.vEmail(errors, email);
-    this.vPassword(errors, password);
-    if(!errors || !errors["email"]){
-        await this.vUserExist(errors, email);
-    }
-    return errors;
-}
-
-exports.validateUserSignin = async (errors, email, password) => {
-    this.vEmail(errors, email);
-    this.vPassword(errors, password);
-    return errors;
-}
