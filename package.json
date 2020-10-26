@@ -11,6 +11,7 @@
     "url": "git+https://github.com/anasnajaa/anasnajaa-api.git"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.3.0",
     "aws-sdk": "^2.745.0",
     "bcrypt": "^5.0.0",
     "cookie-parser": "~1.4.4",
