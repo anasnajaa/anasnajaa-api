@@ -22,6 +22,7 @@ mongoose.connect(stage.mongoUri, {
 });
 const connection = mongoose.connection;
 connection.once('open', () => {
+  console.log("MongoDB connection established")
   // server config
   const app = express();
 
@@ -42,5 +43,5 @@ connection.once('open', () => {
 
   app.use('/api/v1', router);
 
-  app.listen(stage.port, () => console.log("Server Started"));
+  app.listen(stage.port, () => console.log(`Server Started at port: ${stage.port}`));
 });
