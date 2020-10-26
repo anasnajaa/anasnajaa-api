@@ -1,21 +1,11 @@
-const {v4} = require('uuid');
-const {isCaptchaValid} = require('../util/cpatcha');
-const{contentServer} = require('../util/awake');
+const cRequests = require('../controllers/requests.c');
+const cCaptcha = require('../controllers/captcha');
+const cAwake = require('../controllers/awake');
+const emailTest = require('../controllers/emailTest');
 
 exports.init = (router)=>{
-    router.get('/awake', async (req, res, next)=>{
-        const contentServerAwake = await contentServer();
-        res.json({
-            id: v4(),
-            contentServerAwake
-        });
-    });
-
-    router.get("/captcha", async(req, res, next) => {
-        const key = req.query.key;
-        const captchaResult = await isCaptchaValid(key);
-        res.json({
-            isValid: captchaResult
-        })
-    });
+    router.get('/awake', cAwake);
+    router.get("/captcha", cCaptcha);
+    router.post("/requests/service", cRequests.submitServiceRequest);
+    router.get("/email/test", emailTest);
 }
