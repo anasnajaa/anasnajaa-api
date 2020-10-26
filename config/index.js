@@ -28,7 +28,8 @@ module.exports = {
             authToken: process.env.TWILIO_AUTH,
             fromNumber: process.env.TWILIO_FROM
         },
-        googleRecaptch: process.env.GOOGLE_RECAPTCHA_SECRET_KEY
+        googleRecaptch: process.env.GOOGLE_RECAPTCHA_SECRET_KEY,
+        sendGridApiKey: process.env.SENDGRID_API_KEY
     },
     production: {
         port: process.env.PORT || 80,
@@ -60,6 +61,7 @@ module.exports = {
             authToken: process.env.TWILIO_AUTH,
             fromNumber: process.env.TWILIO_FROM
         },
-        googleRecaptch: process.env.GOOGLE_RECAPTCHA_SECRET_KEY
+        googleRecaptch: process.env.GOOGLE_RECAPTCHA_SECRET_KEY,
+        sendGridApiKey: process.env.SENDGRID_API_KEY
     }
 }
