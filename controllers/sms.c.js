@@ -21,7 +21,7 @@ exports.sendMessage =  (type, to, body)=> {
             const response = await client.messages
             .create({
                 from: stage.sms.fromNumber,
-                statusCallback: stage.publicUrl + '/api/sms/update-sms-status',
+                statusCallback: stage.publicUrl + '/api/v1/sms/update-sms-status',
                 body,
                 to
              });
