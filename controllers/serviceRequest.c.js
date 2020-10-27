@@ -18,36 +18,70 @@ exports.sendVerificationCode = async (req, res, next) => {
 
         const {
             captcha,
-            mobile
+            mobile,
+            countryCode
         } = req.body;
         
-        const mobileWithCountryCode = "+965" + mobile;
+        const mobileWithCountryCode = countryCode + mobile;
+
+        const generateAuthCode = () => Math.floor(Math.random()*90000) + 10000;
+
+        const sendAuthSMS = async (mobileWithCountryCode, verificationCode) => {
+            return await smsService.sendMessage(
+                "verification",
+                mobileWithCountryCode, 
+                `${t("your_verification_code")}: ${verificationCode}`);
+        }
+
+
+
 
         vMobile("mobile", errors, mobileWithCountryCode);
-        await vCaptcha("captcha", errors, captcha);
+        //await vCaptcha("captcha", errors, captcha);
 
         if(!isEmpty(errors)){
-            res.json({status: -1, validationErrors: errors});
+            res.json({status: -2, validationErrors: errors});
             return;
         }
 
-        const user = await UserModel.findOne({mobile}).exec();
+        const authCode = generateAuthCode(); 
 
-        console.log("user", user);
+        // might be a returning user, avoid double entry
+        // reset verification as we do not have a login system yet 
+        const updatedUser = await UserModel.updateOne({mobile: mobileWithCountryCode}, {
+            isMobileVerified: false,
+            verificationDate: null,
+            verificationCode: authCode
+        }).lean();
 
-        const verificationCode = Math.floor(Math.random()*90000) + 10000;
+        if(updatedUser.nModified > 0) {
+            await sendAuthSMS(mobileWithCountryCode, authCode);
+            res.json({
+                status: 1,
+                message: r.verification_code_mobile_sent(t)
+            });
+            return;
+        }
 
-        const messageResponse = await smsService.sendMessage(
-            "verification",
-            mobileWithCountryCode, 
-            `${t("your_verification_code")}: ${verificationCode}`);
-
-        res.json({
-            status: 1,
-            message: r.verification_code_sent(t),
-            messageResponse
+        const newUser = await UserModel.create({
+            mobile: mobileWithCountryCode, 
+            verificationCode: authCode,
+            isMobileVerified: false,
+            verificationDate: null
         });
 
+        if(newUser){
+            await sendAuthSMS(mobileWithCountryCode, authCode);
+            res.json({
+                status: 1,
+                message: r.verification_code_mobile_sent(t)
+            });
+        } else {
+            res.json({
+                status: -1,
+                error: "Failed to send verification code"
+            });
+        }
     } catch (error) {
         apiError(res, error);
     }
