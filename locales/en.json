@@ -1,5 +1,6 @@
 {
 	"lang": "en",
 	"your_verification_code": "Your verification code",
-	"verification_code_sent": "Verification code sent. It might take few moments to reach you, please wait."
+	"verification_code_mobile_sent": "Verification code sent. It might take a few moments to reach your mobile device, please wait.",
+	"verification_code_email_sent": "Verification code sent. It might take a few moments to reach your email account, please wait. Please check your spam/junk folders if you don't find the verification email in your inbox."
 }
