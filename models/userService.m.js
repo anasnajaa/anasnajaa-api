@@ -10,7 +10,7 @@ const schema = new Schema({
     serviceId: { 
         type: Schema.Types.ObjectId,
         ref: 'service',
-        required: true
+        required: false
     },
     description: { type: String, required: false },
     isUserContacted: { type: Boolean, required: false },
@@ -20,6 +20,8 @@ const schema = new Schema({
     testimonial: { type: String, required: false },
     contractUrl: { type: String, required: false },
 }, 
-{ timestamps: true });
+{ timestamps: true, collection: 'userService' });
+
+schema.index({userId: 1});
 
 module.exports = mongoose.model('userService', schema);
