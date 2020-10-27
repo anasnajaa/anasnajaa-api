@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     name: { type: String, required: false },
     email: { type: String, required: false },
-    mobile: { type: Number, required: true, unique: true },
+    mobile: { type: String, required: true, unique: true },
     isMobileVerified: { type: Boolean, required: false },
     verificationDate: { type: Boolean, required: false },
     verificationCode: { type: String, required: false },
@@ -13,6 +13,8 @@ const schema = new Schema({
         ref: 'userService'
     }]
 }, 
-{ timestamps: true });
+{ timestamps: true, collection: 'user' });
+
+schema.index({mobile: 1});
 
 module.exports = mongoose.model('user', schema);
