@@ -18,11 +18,12 @@ const stage = require('./config/index')[environment];
 mongoose.connect(stage.mongoUri, {
   useNewUrlParser: true,
   useCreateIndex: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 });
 const connection = mongoose.connection;
 connection.once('open', () => {
-  console.log("MongoDB connection established")
+  console.log("MongoDB connection established");
   // server config
   const app = express();
 
