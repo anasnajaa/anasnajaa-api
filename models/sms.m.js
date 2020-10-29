@@ -24,8 +24,7 @@ const schema = new Schema({
     SmsStatus: { type: String, required: false },
     MessageStatus: { type: String, required: false }
 }, 
-{ timestamps: false});
+{ timestamps: false, collection: 'sms'});
 
-const SMS = mongoose.model('SMS', schema);
 
-module.exports = SMS; 
+module.exports = mongoose.model('sms', schema);
