@@ -1,6 +1,8 @@
 require('dotenv').config();
+const environment = process.env.NODE_ENV;
+const stage = require('./index')[environment];
 const parsePostgressUrl = ()=>{
-  const dbUrl = process.env.DATABASE_URL;
+  const dbUrl = stage.postgressUri;
   const parsedDbUrl = dbUrl.split("//")[1].split(":");
   const passwordAndDomain = parsedDbUrl[1].split("@");
   const portAndDatabase = parsedDbUrl[2].split("/");
