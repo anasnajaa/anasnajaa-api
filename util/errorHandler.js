@@ -1,14 +1,21 @@
 require('dotenv').config();
 const apiMail = require('../email/apiErrorEmail');
 const dbMail = require('../email/dbErrorEmail');
+const cr = require('../locales/codedResponses');
 const environment = process.env.NODE_ENV;
 
-exports.apiError = (res, error) => {
+exports.apiError = (t, res, error) => {
     if (environment !== 'production') {
-        res.status(500).json({status: -1, error: error.message});
+        res.status(500).json({ messages: [
+            {
+                message: error.message,
+                code: -1,
+                type: "error"
+            }
+        ]});
         console.log(error);
     } else {
-        res.status(500).json({status: -1, error: "Server Error, please contact support"});
+        res.status(500).json({ messages: [cr.server_error(t)]});
         apiMail.sendEmail(error);
     }
 }
