@@ -4,7 +4,8 @@
   "description": "API",
   "main": "server.js",
   "scripts": {
-    "start": "if [[ $NODE_ENV == 'production' ]]; then node server.js; else nodemon server.js; fi"
+    "start": "if [[ $NODE_ENV == 'production' ]]; then node server.js; else nodemon server.js; fi",
+    "seed": "node seeds/mongo/index.js"
   },
   "repository": {
     "type": "git",
