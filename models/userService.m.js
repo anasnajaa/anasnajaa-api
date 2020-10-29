@@ -22,6 +22,4 @@ const schema = new Schema({
 }, 
 { timestamps: true, collection: 'userService' });
 
-schema.index({userId: 1});
-
 module.exports = mongoose.model('userService', schema);
