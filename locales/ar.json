@@ -2,5 +2,14 @@
 	"lang": "ar",
 	"your_verification_code": "Your verification code",
 	"verification_code_mobile_sent": "Verification code sent. It might take a few moments to reach your mobile device, please wait.",
-	"verification_code_email_sent": "Verification code sent. It might take a few moments to reach your email account, please wait. Please check your spam/junk folders if you don't find the verification email in your inbox."
+	"verification_code_email_sent": "Verification code sent. It might take a few moments to reach your email account, please wait. Please check your spam/junk folders if you don't find the verification email in your inbox.",
+	"service_request_submission_failed": "We apologize as we couldn't complete your request, please restart the process again.",
+	"service_request_mobile_number_verified": "Mobile number verified, please proceed to the next step",
+	"service_request_failed_to_update_user_details": "Failed to update user details.",
+	"service_request_mobile_or_auth_invalid": "Auth code or mobile number is not valid, please restart the verification process.",
+	"service_request_failed_to_send_code": "Failed to send verification code",
+	"user_input_errors": "Please review submitted data",
+	"fields_missing": "Required fields are missing",
+	"this_field_is_required": "This field is required",
+	"server_error": "Server Error, please contact support"
 }
