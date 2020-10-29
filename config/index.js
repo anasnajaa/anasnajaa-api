@@ -18,7 +18,14 @@ const sharedSettings = {
     jwtSecret: process.env.JWT_SECRET,
     googleRecaptch: process.env.GOOGLE_RECAPTCHA_SECRET_KEY,
     sendGridApiKey: process.env.SENDGRID_API_KEY,
-    publicUrl: process.env.PUBLIC_URL
+    publicUrl: process.env.PUBLIC_URL,
+    emails: {
+        developers: process.env.EMAIL_DEV,
+        databaseAdmins: process.env.EMAIL_DBADMIN,
+        support: process.env.EMAIL_SUPPORT,
+        info: process.env.EMAIL_INFO,
+        payment: process.env.EMAIL_PAYMENT
+    }
 };
 
 const developmentSettings = {
