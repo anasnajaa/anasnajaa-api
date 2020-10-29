@@ -20,7 +20,7 @@ consoleLogger.token('token',  (req) => getTokenValue(req));
 databaseLogger.token('token', (req) => getTokenValue(req));
 
 const productionLogFormat = ":remote-user,:method,:url,:status,:response-time,:token";
-const developmentLogFormat = ":method\t:status\t:response-time\tID :token\t:url";
+const developmentLogFormat = ":method\t:status\t:response-time\t\tID :token\t\t:url";
 
 exports.init = (mongouri, app) => {
     if (environment !== 'production') {
