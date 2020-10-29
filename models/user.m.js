@@ -9,13 +9,12 @@ const schema = new Schema({
     isEmailVerified: { type: Boolean, required: false },
     mobileAuthCode: { type: String, required: false },
     emailAuthCode: { type: String, required: false },
+    infoUpdateToken: { type: String, required: false },
     services: [{
         type: Schema.Types.ObjectId,
         ref: 'userService'
     }]
 }, 
 { timestamps: true, collection: 'user' });
-
-schema.index({mobile: 1});
 
 module.exports = mongoose.model('user', schema);
