@@ -40,25 +40,27 @@ const dbLog = (trx, action, data) => {
 };
 
 const updateIfExisting = (trx, data) => {
-    const {first_name, last_name, email, token, customerId} = data;
+    const {first_name, last_name, email, join_mailing, token, customerId} = data;
     return knex(PREFIX+'customer')
     .transacting(trx)
     .update({
         first_name,
         last_name,
         email,
+        is_profile_complete: true,
+        is_joined_mailing: join_mailing,
         updated_at: new Date()
     })
     .where({auth_code: token, id: customerId})
     .returning('*');
 };
 
-exports.updateCustomerProfile = ({first_name, last_name, email, token, customerId})=>{
+exports.updateCustomerProfile = ({first_name, last_name, email, join_mailing, token, customerId})=>{
     return new Promise((resolve, reject) => {
         knex.transaction(async (trx) => {
             try {
                 const updatedCustomerRows = await updateIfExisting(trx, {
-                    first_name, last_name, email, token, customerId
+                    first_name, last_name, email, join_mailing, token, customerId
                 });
                 if(updatedCustomerRows.length > 0){
                     log("updatedCustomerProfile", updatedCustomerRows);
@@ -69,7 +71,7 @@ exports.updateCustomerProfile = ({first_name, last_name, email, token, customerI
                 }
                 throw new Error("Failed to update profile, please relogin and try again.")
             } catch (err) {
-                const logId = await dbLog(null, ACTIONS.updateError, {id: customerId, err});
+                await dbLog(null, ACTIONS.updateError, {id: customerId, err});
                 log("error", err);
                 trx.rollback;
                 reject(err);

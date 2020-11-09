@@ -88,7 +88,7 @@ exports.getCustomerAuthCode = (mobile)=>{
     
                 throw new Error("Failed to create/update account.")
             } catch (err) {
-                const logId = await dbLog(null, ACTIONS.registrationOrLoginError, {mobile, err});
+                await dbLog(null, ACTIONS.registrationOrLoginError, {mobile, err});
                 log("error", err);
                 trx.rollback;
                 reject(err);

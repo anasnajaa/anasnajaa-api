@@ -1,7 +1,7 @@
 require('dotenv').config();
 const environment = process.env.NODE_ENV;
 const { isEmpty } = require('lodash');
-const { vMobile } = require('../../validators/index');
+const { vMobile, vCaptcha } = require('../../validators/index');
 const { apiError } = require('../../util/errorHandler');
 const smsService = require('../sms.c');
 const {getCustomerAuthCode} = require('../../models/customer_service/getCustomerAuthCode');
@@ -31,7 +31,7 @@ this function will:
 */
 module.exports = async (req, res) => {
     const t = req.__;
-    if(paramsMissing(t, fields, req.body, res)){ return; };
+    if(paramsMissing(t, fields, req.body, res)){ return; }
     try {
         let errors = {};
 

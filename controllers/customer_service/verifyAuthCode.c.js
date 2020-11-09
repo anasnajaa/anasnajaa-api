@@ -15,8 +15,6 @@ const fields = [
     { key: "countryCode", required: true }
 ];
 
-const generateAuthCode = () => Math.floor(Math.random()*90000) + 10000;
-
 /* 
 this function will:
 - update user verification details 
@@ -25,8 +23,8 @@ this function will:
 */
 module.exports = async (req, res) => {
     const t = req.__;
-    if(paramsMissing(t, fields, req.body, res)){ return; };
-    const session = await mongoose.startSession();
+    if(paramsMissing(t, fields, req.body, res)){ return; }
+    await mongoose.startSession();
     try {
         let errors = {};
         const { 

@@ -4,7 +4,6 @@ const {
     vEmpty
 } = require('../../validators/index');
 const { apiError } = require('../../util/errorHandler');
-const UserModel = require('../../models/user.m');
 const UserServiceModel = require('../../models/userService.m');
 const ServiceModel = require('../../models/service.m');
 const cr = require('../../locales/codedResponses');
@@ -28,7 +27,7 @@ this function will:
 */
 module.exports = async (req, res)=>{
     const t = req.__;
-    if(paramsMissing(t, fields, req.body, res)){ return; };
+    if(paramsMissing(t, fields, req.body, res)){ return; }
     const session = await mongoose.startSession();
     try {
         let errors = {};

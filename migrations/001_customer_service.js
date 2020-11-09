@@ -57,7 +57,7 @@ exports.up = function(knex) {
         table.increments().primary();
         table.string('entry', 500);
         table.timestamp('created_at').defaultTo(knex.fn.now());
-    });;
+    });
 };
 
 exports.down = function(knex) {

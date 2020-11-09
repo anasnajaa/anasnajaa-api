@@ -66,7 +66,7 @@ exports.verifyCustomerAuthCode = (mobile, authCode)=>{
                 }
                 throw new Error("Failed to verify account.")
             } catch (err) {
-                const logId = await dbLog(null, ACTIONS.verificationError, {mobile, err});
+                await dbLog(null, ACTIONS.verificationError, {mobile, err});
                 log("error", err);
                 trx.rollback;
                 reject(err);
