@@ -32,7 +32,7 @@ exports.up = function(knex) {
         table.increments().primary();
 
         // foreign keys
-        table.integer('user_id').references('id').inTable('wb_customer').notNullable();
+        table.integer('customer_id').references('id').inTable('wb_customer').notNullable();
         table.integer('service_id').references('id').inTable('wb_service').notNullable();
 
         // service description
@@ -52,11 +52,6 @@ exports.up = function(knex) {
 
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
-    })
-    .createTable('wb_logs', (table)=>{
-        table.increments().primary();
-        table.string('entry', 500);
-        table.timestamp('created_at').defaultTo(knex.fn.now());
     });
 };
 
