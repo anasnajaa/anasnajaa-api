@@ -4,12 +4,14 @@ const cors = require('cors');
 const i18n = require('i18n');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-const router = require('./routes/index.r');
 const useragent = require('express-useragent');
-const logger = require('./util/logger');
 const helmet = require('helmet');
+
+const router = require('./routes/index.r');
+const logger = require('./util/logger');
 const localsConfig = require('./locales/config');
 const rateLimiter = require('./middleware/rateLimiter');
+const cr = require('./locales/codedResponses');
 
 const environment = process.env.NODE_ENV;
 const stage = require('./config/index')[environment];
@@ -21,6 +23,7 @@ mongoose.connect(stage.mongoUri, {
   useUnifiedTopology: true,
   useFindAndModify: false
 });
+
 const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB connection established");
@@ -43,6 +46,13 @@ connection.once('open', () => {
   app.use(rateLimiter.rateLimiterMiddleware);
 
   app.use('/api/v1', router);
+
+  app.all('*', (req, res)=>{
+    const t = req.__;
+    res.status(404).json({
+      messages: [cr.not_found(t)]
+    })
+  })
 
   app.listen(stage.port, () => console.log(`Server Started at port: ${stage.port}`));
 });
