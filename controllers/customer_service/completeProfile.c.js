@@ -1,8 +1,7 @@
 const { isEmpty } = require('lodash');
 const { 
     vEmail, 
-    vEmpty, 
-    vNumeric, 
+    vEmpty
 } = require('../../validators/index');
 const { apiError } = require('../../util/errorHandler');
 const UserModel = require('../../models/user.m');
@@ -14,12 +13,12 @@ const serviceRequestEmail = require('../../email/serviceRequestReceived');
 const paramsMissing = require('../../util/methodParamCheck');
 
 const fields = [
-    { key: "name", required: true },
+    { key: "token", required: true},
+    { key: "first_name", required: true },
+    { key: "last_name", required: true },
     { key: "email", required: true },
-    { key: "description", required: true },
-    { key: "userServiceId", trequired: true },
-    { key: "infoUpdateToken", required: true },
     { key: "serviceId", required: true },
+    { key: "description", trequired: true }
 ];
 
 /* 
@@ -27,7 +26,7 @@ this function will:
 - update user info 
 - send confirmation email to the user
 */
-module.exports = async (req, res, next)=>{
+module.exports = async (req, res)=>{
     const t = req.__;
     if(paramsMissing(t, fields, req.body, res)){ return; };
     const session = await mongoose.startSession();
@@ -78,7 +77,6 @@ module.exports = async (req, res, next)=>{
         const userService = await UserServiceModel.findOne({
             _id: userServiceId
         }).session(session);
-        console.log("service", serviceId);
 
         if(!userService||!service) {
             await session.abortTransaction();
@@ -99,11 +97,7 @@ module.exports = async (req, res, next)=>{
 
         const updatedUser = await user.save();
         const updatedUserService = await userService.save();
-
-        // console.log("updatedUser", updatedUser);
-        // console.log("updatedUserService", updatedUserService);
         
-
         if(!updatedUser || !updatedUserService || !service ){
             await session.abortTransaction();
             session.endSession;
@@ -115,7 +109,7 @@ module.exports = async (req, res, next)=>{
         
         await session.commitTransaction();
 
-        await serviceRequestEmail({email: user.email, serviceTitle: service.name});
+        await serviceRequestEmail({email, name, serviceTitle: service.name});
 
         session.endSession;
 

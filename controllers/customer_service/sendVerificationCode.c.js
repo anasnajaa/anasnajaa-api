@@ -4,11 +4,9 @@ const { isEmpty } = require('lodash');
 const { vMobile } = require('../../validators/index');
 const { apiError } = require('../../util/errorHandler');
 const smsService = require('../sms.c');
-const UserModel = require('../../models/user.m');
+const {getCustomerAuthCode} = require('../../models/customer_service/getCustomerAuthCode');
 const cr = require('../../locales/codedResponses');
 const paramsMissing = require('../../util/methodParamCheck');
-
-const generateAuthCode = () => Math.floor(Math.random()*90000) + 10000;
 
 const sendAuthSMS = async (t, mobileWithCountryCode, verificationCode) => {
     if(environment === "production"){
@@ -59,40 +57,19 @@ module.exports = async (req, res) => {
             return;
         }
 
-        const authCode = generateAuthCode(); 
+        const customerAndLog = await getCustomerAuthCode(mobileWithCountryCode);
 
-        // might be a returning user, avoid double entry
-        // reset verification as we do not have a login system yet 
-        const updatedUser = await UserModel.updateOne({mobile: mobileWithCountryCode}, {
-            isMobileVerified: false,
-            mobileAuthCode: authCode
-        }).lean();
-
-        if(updatedUser.nModified > 0) {
-            await sendAuthSMS(t, mobileWithCountryCode, authCode);
-            res.status(402).json({
+        if(environment === "production"){
+            await sendAuthSMS(t, mobileWithCountryCode, customerAndLog.customer.auth_code);
+            res.status(200).json({
                 messages: [cr.verification_code_mobile_sent(t)]
             });
-            return;
-        }
-
-        const newUser = await UserModel.create({
-            mobile: mobileWithCountryCode, 
-            isMobileVerified: false,
-            mobileAuthCode: authCode
-        });
-
-        if(!newUser){
-            res.status(402).json({
-                messages: [cr.service_request_failed_to_send_code(t)]
+        } else {
+            res.status(200).json({
+                messages: [cr.verification_code_mobile_sent(t)],
+                data: customerAndLog
             });
-            return;
         }
-
-        await sendAuthSMS(mobileWithCountryCode, authCode);
-        res.status(200).json({
-            messages: [cr.verification_code_mobile_sent(t)]
-        });
     } catch (error) {
         apiError(t, res, error);
     }

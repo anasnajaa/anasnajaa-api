@@ -4,8 +4,7 @@ const {
     vMobile
 } = require('../../validators/index');
 const { apiError } = require('../../util/errorHandler');
-const UserModel = require('../../models/user.m');
-const UserServiceModel = require('../../models/userService.m');
+const {verifyCustomerAuthCode} = require('../../models/customer_service/verifyCustomerAuthCode');
 const cr = require('../../locales/codedResponses');
 const mongoose = require('mongoose');
 const paramsMissing = require('../../util/methodParamCheck');
@@ -49,54 +48,16 @@ module.exports = async (req, res) => {
             return;
         }
 
-        session.startTransaction();
-        
-        const user = await UserModel.findOne({
-            mobileAuthCode: authCode,
-            mobile: mobileWithCountryCode
-        }).session(session);
-
-        if(!user){
-            await session.abortTransaction();
-            res.status(402).json({
-                messages: [cr.service_request_mobile_or_auth_invalid(t)]
-            });
-            return;
-        }
-
-        user.isMobileVerified = true;
-        user.mobileAuthCode = null;
-        user.infoUpdateToken = generateAuthCode();
-        
-        const userService = await UserServiceModel.create([{
-            userId: user._id
-        }], {session});
-
-        const newServiceId = userService[0]._id;
-
-        user.services.push(newServiceId);
-
-        const updatedUser = await user.save();
-
-        if(!updatedUser) {
-            await session.abortTransaction();
-            res.status(402).json({
-                messages: [cr.service_request_failed_to_update_user_details(t)]
-            });
-            return;
-        }
-
-        await session.commitTransaction();
+        const customerDetails = await verifyCustomerAuthCode(mobileWithCountryCode, authCode);
 
         res.status(200).json({
             messages: [cr.service_request_mobile_number_verified(t)],
             data: {
-                userServiceId: newServiceId,
-                infoUpdateToken: user.infoUpdateToken
+                token: customerDetails.customer.auth_code,
+                id: customerDetails.customer.id
             }
         });
     } catch (error) {
-        await session.abortTransaction();
         apiError(t, res, error);
     }
 }
