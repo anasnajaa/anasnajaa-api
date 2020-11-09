@@ -11,9 +11,7 @@ const router = express.Router();
 
 router.post("/request/service/send-verification-code", require('../controllers/customer_service/sendVerificationCode.c'));
 router.post("/request/service/verify", require('../controllers/customer_service/verifyAuthCode.c'));
-router.post("/request/service/add-info", require('../controllers/customer_service/completeProfile.c'));
-
-router.get("/requests", require('../controllers/requests/getAll.c'));
+router.post("/request/service/complete-profile", require('../controllers/customer_service/completeProfile.c'));
 
 // Util
 
