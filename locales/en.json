@@ -11,5 +11,6 @@
 	"user_input_errors": "Please review submitted data",
 	"fields_missing": "Required fields are missing",
 	"this_field_is_required": "This field is required",
-	"server_error": "Server Error, please contact support"
+	"server_error": "Server Error, please contact support",
+	"not_found": "Requested resource is not found"
 }

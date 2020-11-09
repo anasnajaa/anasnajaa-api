@@ -23,4 +23,5 @@ module.exports = {
     fields_missing:                                     t => m("e", 8, t('fields_missing')),
     this_field_is_required:                             t => m("e", 9, t('this_field_is_required')),
     server_error:                                       t => m("e", 10, t('server_error')),
+    not_found:                                          t => m("e", 11, t('not_found')),
 };
