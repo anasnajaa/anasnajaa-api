@@ -15,6 +15,9 @@ sgMail.setApiKey(stage.sendGridApiKey);
 
 exports.sendMail = async (mailObject) => {
   try {
+    if(environment!=="production"){
+      mailObject.to = "spidernet12@gmail.com";
+    }
     const msg = merge({ from: "anas.najaa@outlook.com" }, mailObject);
     const response = await sgMail.send(msg);
     return response;
