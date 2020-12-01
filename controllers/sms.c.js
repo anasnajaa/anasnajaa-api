@@ -7,37 +7,39 @@ const {merge} = require('lodash');
 const {apiError} = require('../util/errorHandler');
 
 exports.sendMessage =  (type, to, body)=> {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const message = await new smsModel({
-                type,
-                to,
-                body,
-                date_created: new Date(),
-                date_updated: null,
-                date_sent: null
-            }).save();
-
-            const response = await client.messages
-            .create({
-                from: stage.sms.fromNumber,
-                statusCallback: stage.publicUrl + '/api/v1/sms/update-sms-status',
-                body,
-                to
-             });
-
-             message.date_sent = new Date();
-             merge(message, response);
-             await message.save();
-
-             resolve({serviceResponse: response, addedRecord: message});
-        } catch (error) {
-            reject(error);
-        }
+    return new Promise((resolve, reject) => {
+        (async()=>{
+            try {
+                const message = await new smsModel({
+                    type,
+                    to,
+                    body,
+                    date_created: new Date(),
+                    date_updated: null,
+                    date_sent: null
+                }).save();
+    
+                const response = await client.messages
+                .create({
+                    from: stage.sms.fromNumber,
+                    statusCallback: stage.publicUrl + '/api/v1/sms/update-sms-status',
+                    body,
+                    to
+                 });
+    
+                 message.date_sent = new Date();
+                 merge(message, response);
+                 await message.save();
+    
+                 resolve({serviceResponse: response, addedRecord: message});
+            } catch (error) {
+                reject(error);
+            }
+        })()
     });
 }
 
-exports.updateMessageStatus = async (req, res, next)=>{
+exports.updateMessageStatus = async (req, res)=>{
     try {
         const sms = req.body;
         sms.date_updated = new Date();
@@ -48,6 +50,6 @@ exports.updateMessageStatus = async (req, res, next)=>{
     }
 };
 
-exports.getMessages = async (req, res, next) => {
+exports.getMessages = async () => {
 
 };
