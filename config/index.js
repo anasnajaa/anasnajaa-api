@@ -69,6 +69,6 @@ const productionSettings = {
 };
 
 module.exports = {
-    development: merge(sharedSettings, developmentSettings),
-    production: merge(sharedSettings, productionSettings)
+    development: merge({...sharedSettings}, developmentSettings),
+    production: merge({...sharedSettings}, productionSettings)
 };
