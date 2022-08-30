@@ -23,8 +23,8 @@ const schema = new Schema({
     uri: { type: String, required: false },
     SmsStatus: { type: String, required: false },
     MessageStatus: { type: String, required: false }
-}, 
-{ timestamps: false, collection: 'sms'});
+},
+    { timestamps: false, collection: 'sms' });
 
 
 module.exports = mongoose.model('sms', schema);
